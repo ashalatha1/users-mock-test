@@ -6,11 +6,20 @@ form.addEventListener('submit',event=>{
     var lname=form.elements['lname'].value;
     var gender=form.elements['Gender'].value;
     var email=form.elements['email'].value;
-    var user = {"first_name":fname, "last_name":lname, "gender":gender, "email":email};
-    fetch('https://my-json-server.typicode.com/ashalatha1/users-mock-test/users', {method:'POST', body:user ,headers: {
-        'Content-Type': 'application/json',
-        },})
-.then(result=>result.json()).then(console.log)
+    var user = JSON.stringify({"first_name":fname, "last_name":lname, "gender":gender, "email":email});
+	
+    var xhr = new XMLHttpRequest();
+xhr.open("POST", 'https://my-json-server.typicode.com/ashalatha1/users-mock-test/users', true);
+
+//Send the proper header information along with the request
+xhr.setRequestHeader("Content-Type", "application/json");
+//xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+xhr.onreadystatechange = function() { // Call a function when the state changes.
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        getUsers();
+    }
+}
+xhr.send(user);
 })
 
 function getUsers(){
@@ -21,8 +30,7 @@ function getUsers(){
 	 var table = document.createElement("TABLE");
         table.border = "1";
  
-        //Get the count of columns.
-		debugger;
+        
         var rowCount = usersFromDB.length;
 		addTable();
  
